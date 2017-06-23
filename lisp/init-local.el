@@ -140,4 +140,11 @@ See also `toggle-frame-maximized'."
        nil `((fullscreen . fullscreen) (fullscreen-restore . ,fullscreen))))))
 
 
+;;-------------------------------------------
+;;check init
+;;-------------------------------------------
+(defun test-startup ()
+  (interactive)
+  (async-shell-command "cd ~/.emacs.d;./test-startup.sh"))
+
 (provide 'init-local)
