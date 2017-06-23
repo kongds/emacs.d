@@ -140,6 +140,9 @@
 (require 'init-ledger)
 (require 'init-ace)
 (require 'init-spaceline)
+(require 'init-helm)
+(require 'init-helm-gtags)
+(require 'init-xcode)
 
 ;; Extra packages which don't require any configuration
 
