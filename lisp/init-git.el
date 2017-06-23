@@ -3,6 +3,7 @@
 (require-package 'git-blamed)
 (require-package 'gitignore-mode)
 (require-package 'gitconfig-mode)
+(require-package 'git-messenger) ;; Though see also vc-annotate's "n" & "p" bindings
 (maybe-require-package 'git-timemachine)
 
 
@@ -71,8 +72,7 @@
     (compile (concat "git svn " command))))
 
 
-(maybe-require-package 'git-messenger)
-;; Though see also vc-annotate's "n" & "p" bindings
+(require-package 'git-messenger)
 (global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
 
 
