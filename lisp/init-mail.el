@@ -86,7 +86,6 @@
  smtpmail-stream-type 'starttls
  smtpmail-default-smtp-server "smtp.mail.me.com"
  smtpmail-smtp-server "smtp.mail.me.com"
- smtpmail-auth-supported
  smtpmail-smtp-service 587
  smtpmail-smtp-user "j614023177@icloud.com"
  mu4e-maildir "~/Maildir"
