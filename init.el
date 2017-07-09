@@ -100,6 +100,7 @@
 (require 'init-textile)
 (require 'init-markdown)
 (require 'init-csv)
+(require 'init-cc)
 (require 'init-erlang)
 (require 'init-javascript)
 (require 'init-php)

@@ -14,7 +14,8 @@
 
 ;; allow for updating mail using 'U' in the main view:
 (setq mu4e-get-mail-command "offlineimap")
-(setq mu4e-update-interval 300)
+(setq mu4e-update-interval 180
+      mu4e-headers-auto-update t)
 
 ;; sending mail -- replace USERNAME with your gmail username
 ;; also, make sure the gnutls command line utils are installed
@@ -106,6 +107,7 @@
 
 
 
-
+;;make s-k can work in mail
+(define-key mu4e-view-mode-map (kbd "s-k") 'mu4e~view-quit-buffer)
 
 (provide 'init-mail)

@@ -7,7 +7,7 @@
     (save-buffer)
     (compile
      (if  (eq (length (shell-command-to-string "ls | grep Make")) 0)
-         (concat (if isC++ "g++ " "gcc ")
+         (concat (if isC++ "g++ -std=c++11 " "gcc ")
                  "-o "
                  out-file
                  " "

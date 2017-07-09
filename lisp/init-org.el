@@ -85,6 +85,8 @@ typical word processor."
 (add-hook 'org-mode-hook '(lambda ()
                             (set (make-local-variable 'company-backends)
                                  '(company-ispell))))
+(require 'company-ispell)
+(setq company-ispell-dictionary "/usr/share/dict/words")
 
 
 (setq org-support-shift-select t)

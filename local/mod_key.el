@@ -59,6 +59,9 @@
 (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "s-n") 'make-frame)
 (global-set-key (kbd "s-q") 'save-buffers-kill-emacs)
-(global-set-key (kbd "s-i") 'multi-term)
+(global-set-key (kbd "s-i") 'multi-term-next)
+
+;;mu4e
+(global-set-key (kbd "C-c m") 'mu4e)
 
 (provide 'mod_key)

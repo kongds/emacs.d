@@ -49,5 +49,7 @@
   (setq diredp-dir-name dired-directory-face))
 
 
+(global-set-key (kbd "C-c p") '(lambda () (interactive)
+                                 (kill-new (substring  (pwd) 10 nil))))
 
 (provide 'init-dired)
