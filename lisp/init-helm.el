@@ -4,6 +4,7 @@
     (require 'helm-config)
     (require 'helm-grep)
     (require 'helm-elisp)
+
     ;; To fix error at compile:ias
     ;; Error (bytecomp): Forgot to expand macro with-helm-buffer in
     ;; (with-helm-buffer helm-echo-input-in-header-line)
@@ -149,5 +150,15 @@
       (setq projectile-completion-system 'helm)
       (setq projectile-indexing-method 'alien))))
 
+;; helm read file name
+;; create new function helm-find-files-up-one-level-point-at-first with C-l
+;; don't use helm-ff-retrieve-last-expanded because i hate it
+(require 'helm-files)
+(fset 'helm-find-files-up-one-level-point-at-first
+      (read  (replace-regexp-in-string
+              "helm-ff-retrieve-last-expanded"
+              "(lambda() )"
+              (prin1-to-string (symbol-function 'helm-find-files-up-one-level)))))
+(define-key helm-read-file-map (kbd "C-l") 'helm-find-files-up-one-level-point-at-first)
 
 (provide 'init-helm)
