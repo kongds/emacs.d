@@ -139,6 +139,7 @@
 (require 'init-helm-gtags)
 (require 'init-xcode)
 (require 'init-mail)
+(require 'init-qt)
 
 ;; Extra packages which don't require any configuration
 
