@@ -23,11 +23,6 @@
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
 
 ;;-------------------------------------------
-;;symon
-;;-------------------------------------------
-;;(symon-mode)
-
-;;-------------------------------------------
 ;;matlab
 ;;-------------------------------------------
 (setq matlab-shell-command "/Applications/MATLAB_R2016a.app/bin/matlab")
@@ -146,5 +141,103 @@ See also `toggle-frame-maximized'."
 (defun test-startup ()
   (interactive)
   (async-shell-command "cd ~/.emacs.d;./test-startup.sh"))
+
+;;-------------------------------------------
+;;rewrite y-or-n-p (let enter can use as y)
+;;-------------------------------------------
+(fset 'y-or-n-p
+      (byte-compile  (lambda (prompt)
+                       "Ask user a \"y or n\" question.
+Return t if answer is \"y\" and nil if it is \"n\".
+PROMPT is the string to display to ask the question.  It should
+end in a space; `y-or-n-p' adds \"(y or n) \" to it.
+
+No confirmation of the answer is requested; a single character is
+enough.  SPC also means yes, and DEL means no.
+
+To be precise, this function translates user input into responses
+by consulting the bindings in `query-replace-map'; see the
+documentation of that variable for more information.  In this
+case, the useful bindings are `act', `skip', `recenter',
+`scroll-up', `scroll-down', and `quit'.
+An `act' response means yes, and a `skip' response means no.
+A `quit' response means to invoke `keyboard-quit'.
+If the user enters `recenter', `scroll-up', or `scroll-down'
+responses, perform the requested window recentering or scrolling
+and ask again.
+
+Under a windowing system a dialog box will be used if `last-nonmenu-event'
+is nil and `use-dialog-box' is non-nil."
+                       (let ((answer 'recenter)
+                             (padded (lambda (prompt &optional dialog)
+                                       (let ((l (length prompt)))
+                                         (concat prompt
+                                                 (if (or (zerop l) (eq ?\s (aref prompt (1- l))))
+                                                     "" " ")
+                                                 (if dialog "" "(y or n) "))))))
+                         (cond
+                          (noninteractive
+                           (setq prompt (funcall padded prompt))
+                           (let ((temp-prompt prompt))
+                             (while (not (memq answer '(act skip)))
+                               (let ((str (read-string temp-prompt)))
+                                 (cond ((member str '("y" "Y")) (setq answer 'act))
+                                       ((member str '("n" "N")) (setq answer 'skip))
+                                       (t (setq temp-prompt (concat "Please answer y or n.  "
+                                                                    prompt))))))))
+                          ((and (display-popup-menus-p)
+                                last-input-event ; not during startup
+                                (listp last-nonmenu-event)
+                                use-dialog-box)
+                           (setq prompt (funcall padded prompt t)
+                                 answer (x-popup-dialog t `(,prompt ("Yes" . act) ("No" . skip)))))
+                          (t
+                           (setq prompt (funcall padded prompt))
+                           (while
+                               (let* ((scroll-actions '(recenter scroll-up scroll-down
+                                                                 scroll-other-window scroll-other-window-down))
+                                      (key
+                                       (let ((cursor-in-echo-area t))
+                                         (when minibuffer-auto-raise
+                                           (raise-frame (window-frame (minibuffer-window))))
+                                         (read-key (propertize (if (memq answer scroll-actions)
+                                                                   prompt
+                                                                 (concat "Please answer y or n.  "
+                                                                         prompt))
+                                                               'face 'minibuffer-prompt)))))
+                                 ;;let ret can work
+                                 (setq answer (if (equal key 13)
+                                                  'act
+                                                (lookup-key query-replace-map (vector key) t)))
+                                 (cond
+                                  ((memq answer '(skip act)) nil)
+                                  ((eq answer 'recenter)
+                                   (recenter) t)
+                                  ((eq answer 'scroll-up)
+                                   (ignore-errors (scroll-up-command)) t)
+                                  ((eq answer 'scroll-down)
+                                   (ignore-errors (scroll-down-command)) t)
+                                  ((eq answer 'scroll-other-window)
+                                   (ignore-errors (scroll-other-window)) t)
+                                  ((eq answer 'scroll-other-window-down)
+                                   (ignore-errors (scroll-other-window-down)) t)
+                                  ((or (memq answer '(exit-prefix quit)) (eq key ?\e))
+                                   (signal 'quit nil) t)
+                                  (t t)))
+                             (ding)
+                             (discard-input))))
+                         (let ((ret (eq answer 'act)))
+                           (unless noninteractive
+                             (message "%s%c" prompt (if ret ?y ?n)))
+                           ret)))))
+
+;;-------------------------------------------
+;;ask you if you want to kill emacs
+;;-------------------------------------------
+(global-set-key (kbd "C-x C-c")
+                (lambda () (interactive)
+                  (if (y-or-n-p "Do you want to quit? ")
+                      (save-buffers-kill-terminal))))
+
 
 (provide 'init-local)
