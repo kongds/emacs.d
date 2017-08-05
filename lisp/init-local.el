@@ -240,4 +240,10 @@ is nil and `use-dialog-box' is non-nil."
                       (save-buffers-kill-terminal))))
 
 
+;;-------------------------------------------
+;;persistent-scratch
+;;-------------------------------------------
+(require 'persistent-scratch)
+(persistent-scratch-setup-default)
+
 (provide 'init-local)

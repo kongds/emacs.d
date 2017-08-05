@@ -6,6 +6,7 @@
 ;;using spaceline
 (spaceline-emacs-theme)
 (spaceline-helm-mode)
+(spaceline-toggle-minor-modes-off)
 
 ;;(use-package spaceline-all-the-icons 
 ;;  :after spaceline
