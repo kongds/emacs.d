@@ -2,7 +2,7 @@
 
 (defun compile-cc (isC++)
   "run the cpp at first line comment "
-  (let ((compile-file (buffer-name))
+  (let ((compile-file (buffer-file-name))
         (out-file     (car  (split-string (buffer-name) "\\."))))
     (save-buffer)
     (compile
