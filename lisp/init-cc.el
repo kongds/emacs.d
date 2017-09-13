@@ -6,16 +6,14 @@
         (out-file     (car  (split-string (buffer-name) "\\."))))
     (save-buffer)
     (compile
-     (if  (eq (length (shell-command-to-string "ls | grep Make")) 0)
-         (concat (if isC++ "g++ -std=c++11 " "gcc ")
-                 "-o "
-                 out-file
-                 " "
-                 compile-file
-                 ";./"
-                 out-file
-                 )
-       "make -k"))))
+     (concat (if isC++ "g++ -std=c++11 " "gcc ")
+             "-o "
+             out-file
+             " "
+             compile-file
+             ";./"
+             out-file
+             ))))
 
 (define-key c++-mode-map (kbd "s-r") '(lambda () (interactive) (compile-cc t)))
 (define-key c-mode-map   (kbd "s-r") '(lambda () (interactive) (compile-cc nil)))

@@ -6,6 +6,11 @@
 (require 'multi-term)
 (setq multi-term-program "/bin/zsh")
 (setq system-uses-terminfo nil)
+(define-key term-raw-map (kbd "C-k") (lambda ()
+                                       (interactive)
+                                       (kill-line)
+                                       (term-send-raw)))
+(add-hook 'term-mode-hook '(lambda ()  (whole-line-or-region-local-mode -1)))
 
 ;;---------------------------------------------
 ;;dwrite
@@ -245,5 +250,15 @@ is nil and `use-dialog-box' is non-nil."
 ;;-------------------------------------------
 (require 'persistent-scratch)
 (persistent-scratch-setup-default)
+
+;;-------------------------------------------
+;;doc mode
+;;-------------------------------------------
+(require 'doc-view)
+(require 'image)
+(define-key doc-view-mode-map (kbd "h") 'image-backward-hscroll)
+(define-key doc-view-mode-map (kbd "j") 'doc-view-next-line-or-next-page)
+(define-key doc-view-mode-map (kbd "k") 'doc-view-previous-line-or-previous-page)
+(define-key doc-view-mode-map (kbd "l") 'image-forward-hscroll)
 
 (provide 'init-local)
